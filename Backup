@@ -4,6 +4,6 @@ sudo apt install python3.9 -y
 sudo apt install python3-pip -y
 sudo mkdir /MssqlBackup
 cd /MssqlBackup
-sudo wget https://raw.githubusercontent.com/rgoogoonani/Mssql-backup/main/Startup.py
-sudo wget https://raw.githubusercontent.com/rgoogoonani/Mssql-backup/main/AutoBackup.py
+sudo wget https://raw.githubusercontent.com/rgoogoonani/Mssql-Backup/main/Startup.py
+sudo wget https://raw.githubusercontent.com/rgoogoonani/Mssql-Backup/main/AutoBackup.py
 sudo python3 /MssqlBackup/Startup.py
