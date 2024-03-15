@@ -1,26 +1,26 @@
 import os
 
-botToken = input("Mega UserName :")
-while botToken=="":
-    botToken = input("Mega UserName :")
-print(botToken)
+username = input("Mega UserName :")
+while username=="":
+    username = input("Mega UserName :")
+print(username)
 #-------------------------------------------------------------------
-chid=input("Mega Password : ")
-while chid=="":
-    chid=input("Mega Password : ")
-print(chid)
+password=input("Mega Password : ")
+while password=="":
+    password=input("Mega Password : ")
+print(password)
 #-------------------------------------------------------------------
-Name=input("Server Name : ")
-if Name=="":
-    Name="Mssql"
-print(Name)
-#-------------------------------------------------------------------
-FileAddres=input("File Addres : ")
+FileAddres=input("Server Name : ")
 if FileAddres=="":
-    FileAddres="/var/opt/mssql"
+    FileAddres="Mssql"
 print(FileAddres)
+#-------------------------------------------------------------------
+Name=input("File Addres : ")
+if Name=="":
+    Name="/var/opt/mssql"
+print(Name)
 with open("/MssqlBackup/config.txt","w") as f:
-    f.writelines(chid+"\n"+Name+"\n"+FileAddres+"\n"+botToken)
+    f.writelines(username+"\n"+password+"\n"+FileAddres+"\n"+Name)
 
 
 with open("/etc/systemd/system/MssqlAutoBackup.service","w") as f:

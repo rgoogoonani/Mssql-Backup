@@ -26,7 +26,10 @@ Name=lines[3]
 
 t=len(spl1)-1
 FileName=spl1[t]
-
+print(username)
+print(password)
+print(FileAddres)
+print(Name)
 
 def ReplaceFile(filename,folder,username, password):
     mega = mega.Mega()
@@ -46,7 +49,7 @@ def upload():
     archived = shutil.make_archive('/MsSql', 'zip', FileAddres)
 
     if os.path.exists('/MsSql.zip'):
-        ReplaceFile('/MsSql.zip',Name+"_Backup",username, password)
+        ReplaceFile('/MsSql.zip',Name,username, password)
         #requests.get(f"https://api.telegram.org/bot{token}/sendDocument?chat_id={chid}&caption=SQL Server Name : {Name}",files={'document': (FileName, open("/MsSql.zip", 'rb'))})
         print("uploaded")
     else: 
