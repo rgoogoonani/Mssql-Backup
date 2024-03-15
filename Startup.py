@@ -1,16 +1,18 @@
 import os
 
-botToken = input("Bot Token :")
-while len(botToken)<46 :
-    botToken = input("invalid bot token try again: ")
+botToken = input("Mega UserName :")
+while botToken=="":
+    botToken = input("Mega UserName :")
 print(botToken)
 #-------------------------------------------------------------------
-chid=input("Chatid : ")
+chid=input("Mega Password : ")
 while chid=="":
-    chid = input("Chatid : ")
+    chid=input("Mega Password : ")
 print(chid)
 #-------------------------------------------------------------------
 Name=input("Server Name : ")
+if Name=="":
+    Name="Mssql"
 print(Name)
 #-------------------------------------------------------------------
 FileAddres=input("File Addres : ")
