@@ -20,7 +20,7 @@ if Name=="":
     Name="/var/opt/mssql"
 print(Name)
 with open("/MssqlBackup/config.txt","w") as f:
-    f.writelines(username+"\n"+password+"\n"+FileAddres+"\n"+Name)
+    f.writelines(username+"\n"+password+"\n"+Name+"\n"+FileAddres)
 
 
 with open("/etc/systemd/system/MssqlAutoBackup.service","w") as f:

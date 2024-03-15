@@ -32,7 +32,7 @@ print(FileAddres)
 print(Name)
 
 def ReplaceFile(filename,folder,username, password):
-    mega = mega.Mega()
+    mega = Mega()
     m = mega.login(username, password)
     files = m.find(folder)
     if files:
