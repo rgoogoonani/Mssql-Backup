@@ -31,33 +31,36 @@ print(password)
 print(FileAddres)
 print(Name)
 
+mega = mega.Mega()
 def ReplaceFile(filename,folder,username, password):
-    mega = Mega()
+    
     m = mega.login(username, password)
-    files = m.find(folder)
-    if files:
-        m.delete(files[0])
+    if len(m.get_files())>50:
+        files = m.find(folder)
+        if files:
+            m.delete(files[0])
     m.create_folder(folder)
     folder = m.find(folder)
 
     m.upload(filename, folder[0])
 #-------------------------------------------------------------------
 def upload():
+    
     if os.path.exists('/MsSql.zip'):
         os.remove("/MsSql.zip")
     
     archived = shutil.make_archive('/MsSql', 'zip', FileAddres)
 
     if os.path.exists('/MsSql.zip'):
-        ReplaceFile('/MsSql.zip',Name,username, password)
+        ReplaceFile('/MsSql.zip',Name+time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),username, password)
         #requests.get(f"https://api.telegram.org/bot{token}/sendDocument?chat_id={chid}&caption=SQL Server Name : {Name}",files={'document': (FileName, open("/MsSql.zip", 'rb'))})
         print("uploaded")
     else: 
         print("ZIP file not created")
-    
+
 while True:
     try:
         upload()
     except:
         print()
-    time.sleep(60)
+    time.sleep(300)
