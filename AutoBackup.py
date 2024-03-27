@@ -32,21 +32,21 @@ print(FileAddres)
 print(Name)
 
 mega = mega.Mega()
-def DeleteFile(username, password,folder):
+def DeleteFile(username, password, folder):
     m = mega.login(username, password)
     getfile=m.get_files()
     
     if len(getfile)>50:
         for item in getfile.items():
-            if folder in item[1]['a']['n']:
+            if folder in str(item[1]['a']['n']):
                 files = m.find(item[1]['a']['n'])
                 if files:
-                    m.delete(files[0])
+                    m.destroy(files[0])
                 return
 def ReplaceFile(filename,folder,username, password):
     
     
-    DeleteFile(username, password,folder)
+    DeleteFile(username, password, folder+" "+time.strftime("%Y-%m", time.gmtime()))
     print("Deleted")
     m = mega.login(username, password)
     folder=folder+" "+time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
