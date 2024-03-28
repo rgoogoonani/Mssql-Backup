@@ -36,7 +36,7 @@ def DeleteFile(username, password, folder):
     m = mega.login(username, password)
     getfile=m.get_files()
     
-    if len(getfile)>50:
+    if len(getfile)>150:
         for item in getfile.items():
             if folder in str(item[1]['a']['n']):
                 files = m.find(item[1]['a']['n'])
