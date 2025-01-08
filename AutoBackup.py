@@ -1,76 +1,85 @@
-import shutil 
-import os.path
+import shutil
 import os
-import json
 import time
-import os
-try:
-    import mega
-except:
-    os.system("pip3 install mega.py")
-    from mega import Mega
+from mega import Mega
 import urllib3
+
 urllib3.disable_warnings()
 
+# خواندن اطلاعات کانفیگ
 lines = ""
-with open("/MssqlBackup/config.txt","r+") as f :
-    lines=f.read().split("\n")
-    lines=[i.replace("\r","") for i in lines]
-username=lines[0]
+with open("/MssqlBackup/config.txt", "r+") as f:
+    lines = f.read().split("\n")
+    lines = [i.replace("\r", "") for i in lines]
+username = lines[0]
 password = lines[1]
+FileAddres = lines[2]
+spl1 = FileAddres.split("/")
+Name = lines[3]
 
-FileAddres=lines[2]
-spl1=FileAddres.split("/")
-
-Name=lines[3]
-
-t=len(spl1)-1
-FileName=spl1[t]
+FileName = spl1[-1]
 print(username)
 print(password)
 print(FileAddres)
 print(Name)
 
-mega = mega.Mega()
+mega = Mega()
+
+def safe_login(username, password, retries=5, delay=10):
+    """Login to Mega with retries."""
+    for attempt in range(retries):
+        try:
+            return mega.login(username, password)
+        except Exception as e:
+            print(f"Login failed: {e}. Retrying in {delay} seconds...")
+            time.sleep(delay)
+    raise Exception("Failed to login to Mega after multiple attempts.")
+
 def DeleteFile(username, password, folder):
-    m = mega.login(username, password)
-    getfile=m.get_files()
-    
-    if len(getfile)>150:
-        for item in getfile.items():
-            if folder in str(item[1]['a']['n']):
-                files = m.find(item[1]['a']['n'])
-                if files:
-                    m.destroy(files[0])
-                return
-def ReplaceFile(filename,folder,username, password):
-    
-    
-    DeleteFile(username, password, folder+" "+time.strftime("%Y-%m", time.gmtime()))
-    print("Deleted")
-    m = mega.login(username, password)
-    folder=folder+" "+time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-    m.create_folder(folder)
-    folder = m.find(folder)
-    m.upload(filename, folder[0])
-#-------------------------------------------------------------------
+    try:
+        m = safe_login(username, password)
+        getfile = m.get_files()
+
+        if len(getfile) > 150:
+            for item in getfile.items():
+                if folder in str(item[1]['a']['n']):
+                    files = m.find(item[1]['a']['n'])
+                    if files:
+                        m.destroy(files[0])
+                    return
+    except Exception as e:
+        print(f"Error in DeleteFile: {e}")
+
+def ReplaceFile(filename, folder, username, password):
+    try:
+        DeleteFile(username, password, folder + " " + time.strftime("%Y-%m", time.gmtime()))
+        print("Deleted")
+        m = safe_login(username, password)
+        folder = folder + " " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        m.create_folder(folder)
+        folder = m.find(folder)
+        m.upload(filename, folder[0])
+    except Exception as e:
+        print(f"Error in ReplaceFile: {e}")
+
 def upload():
-    
-    if os.path.exists('/MsSql.zip'):
-        os.remove("/MsSql.zip")
-    
-    archived = shutil.make_archive('/MsSql', 'zip', FileAddres)
-    print("Zip")
-    if os.path.exists('/MsSql.zip'):
-        ReplaceFile('/MsSql.zip',Name,username, password)
-        #requests.get(f"https://api.telegram.org/bot{token}/sendDocument?chat_id={chid}&caption=SQL Server Name : {Name}",files={'document': (FileName, open("/MsSql.zip", 'rb'))})
-        print("uploaded")
-    else: 
-        print("ZIP file not created")
-upload()
+    try:
+        if os.path.exists('/MsSql.zip'):
+            os.remove("/MsSql.zip")
+
+        archived = shutil.make_archive('/MsSql', 'zip', FileAddres)
+        print("Zip created")
+        if os.path.exists('/MsSql.zip'):
+            ReplaceFile('/MsSql.zip', Name, username, password)
+            print("Uploaded")
+        else:
+            print("ZIP file not created")
+    except Exception as e:
+        print(f"Error in upload: {e}")
+
 while True:
     try:
         upload()
-    except:
-        print("1111111111")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
     time.sleep(300)
